@@ -69,51 +69,61 @@
         aria-labelledby="pills-home-tab"
         tabindex="0"
       >
-        <div
-          class="container d-flex gap-1 flex-wrap mt-4 justify-content-center"
-        >
-          <div class="col-sm-12">
-            <div class="card bd-placeholder-img card-img">
-              <img class="img-fluid" src="./assets/codeSnap.png" alt="" />
-            </div>
-          </div>
-          <div class="col-sm-12">
-            <div class="card bd-placeholder-img card-img">
-              <img class="img-fluid" src="./assets/codeSnap1.png" alt="" />
-            </div>
-            <div class="col-sm-12 col-lg-12 mt-3">
+        <div class="container mt-3">
+          <h1 class="text-center text-light">
+            Results Generated through this App
+          </h1>
+          <div class="row">
+            <div class="col-4">
               <div class="card bd-placeholder-img card-img">
-                <img class="img-fluid" src="./assets/codeSnap2.png" alt="" />
+                <img class="img-fluid" src="./assets/codeSnap.png" alt="" />
               </div>
             </div>
-            <div class="col-sm-12 col-lg-12 mt-3">
+            <div class="col-4">
+              <div class="card bd-placeholder-img card-img">
+                <img class="img-fluid" src="./assets/codeSnap1.png" alt="" />
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="card bd-placeholder-img card-img">
+                <img class="img-fluid" src="./assets/codeSnap8.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap3.png" alt="" />
               </div>
             </div>
-            <div class="col-sm-12 col-lg-12 mt-3">
-              <div class="card bd-placeholder-img card-img">
-                <img class="img-fluid" src="./assets/codeSnap4.png" alt="" />
-              </div>
-            </div>
-            <div class="col-sm-12 col-lg-12 mt-3">
+
+            <div class="col-4">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap5.png" alt="" />
               </div>
             </div>
-            <div class="col-sm-12 col-lg-12 mt-3">
+
+            <div class="col-4">
+              <div class="card bd-placeholder-img card-img">
+                <img class="img-fluid" src="./assets/codeSnap2.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-4">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap6.png" alt="" />
               </div>
             </div>
-            <div class="col-sm-12 col-lg-12 mt-3">
+            <div class="col-4">
               <div class="card bd-placeholder-img card-img">
-                <img class="img-fluid" src="./assets/codeSnap7.png" alt="" />
+                <img class="img-fluid" src="./assets/codeSnap4.png" alt="" />
               </div>
             </div>
-            <div class="col-sm-12 col-lg-12 mt-3">
+            <div class="col-4">
               <div class="card bd-placeholder-img card-img">
-                <img class="img-fluid" src="./assets/codeSnap8.png" alt="" />
+                <img class="img-fluid" src="./assets/codeSnap7.png" alt="" />
               </div>
             </div>
           </div>
@@ -160,6 +170,19 @@
             Generate Image
           </button>
         </form>
+        <div
+          class="container alert alert-danger alert-dismissible fade show"
+          role="alert"
+          v-if="errorFlag2"
+        >
+          <strong>Holy guacamole!</strong> SomeThing went Really Wrong
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
         <div class="container" v-if="imgUrl">
           <img
             :src="imgUrl"
@@ -215,6 +238,19 @@
             Generate Text
           </button>
         </form>
+        <div
+          class="container alert alert-danger alert-dismissible fade show"
+          role="alert"
+          v-if="errorFlag1"
+        >
+          <strong>Holy guacamole!</strong> SomeThing went Really Wrong
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
         <ssh-pre
           reactive
           copy-button
@@ -289,6 +325,8 @@ export default {
       generatedText1: "",
       generatedText2: "",
       codeArray: [],
+      errorFlag1: false,
+      errorFlag2: false,
     };
   },
   components: { SshPre },
@@ -329,15 +367,22 @@ export default {
     },
     imageGeneratorHandler: async function (val) {
       this.flag1 = true;
-      if (val) {
-        const response = await this.openai.createImage({
-          prompt: this.inputText,
-          n: 1,
-          size: "1024x1024",
-        });
-        console.log(response.data.data[0].url);
-        this.imgUrl = response.data.data[0].url;
+      try {
+        if (val) {
+          this.imgUrl = "";
+          const response = await this.openai.createImage({
+            prompt: this.inputText,
+            n: 1,
+            size: "1024x1024",
+          });
+          console.log(response.data.data[0].url);
+          this.imgUrl = response.data.data[0].url;
+          this.flag1 = false;
+        }
+      } catch (error) {
         this.flag1 = false;
+        console.log(error.message, "hello", error.cause);
+        this.errorFlag2 = true;
       }
     },
     checkForCodeRequest(inpValue) {
@@ -378,29 +423,41 @@ export default {
       if (bool) {
         this.codeArray.length = 0;
         this.generatedText2 = "";
-        const completion = await this.openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: this.inputText2,
-          max_tokens: 1024,
-          n: 10,
-          temperature: 1.0,
-        });
-        this.codeArray = completion.data.choices;
-        this.generatedText1 = completion.data.choices[0].text;
-        this.flag2 = false;
+        try {
+          const completion = await this.openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: this.inputText2,
+            max_tokens: 1024,
+            n: 10,
+            temperature: 1.0,
+          });
+
+          this.codeArray = completion.data.choices;
+          this.generatedText1 = completion.data.choices[0].text;
+          this.flag2 = false;
+        } catch (error) {
+          this.errorFlag1 = true;
+          this.flag2 = false;
+          console.log("error", error);
+        }
       } else {
         this.codeArray.length = 0;
         this.generatedText2 = "";
-        const completion = await this.openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: this.inputText2,
-          max_tokens: 1024,
-          n: 5,
-          temperature: 1.0,
-        });
+        try {
+          const completion = await this.openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: this.inputText2,
+            max_tokens: 1024,
+            n: 5,
+            temperature: 1.0,
+          });
 
-        this.generatedText2 = completion.data.choices[0].text;
-        this.flag2 = false;
+          this.generatedText2 = completion.data.choices[0].text;
+          this.flag2 = false;
+        } catch (error) {
+          this.flag2 = false;
+          this.errorFlag1 = true;
+        }
       }
     },
   },
@@ -433,4 +490,13 @@ code {
   background-color: white !important;
   color: black !important;
 } */
+@media screen and (max-width: 480px) {
+  ul {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    border-radius: 0px !important;
+    font-size: 25px;
+  }
+}
 </style>
