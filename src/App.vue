@@ -74,54 +74,54 @@
             Results Generated through this App
           </h1>
           <div class="row">
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap.png" alt="" />
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap1.png" alt="" />
               </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap8.png" alt="" />
               </div>
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap3.png" alt="" />
               </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap5.png" alt="" />
               </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap2.png" alt="" />
               </div>
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap6.png" alt="" />
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap4.png" alt="" />
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-4 col-sm-12">
               <div class="card bd-placeholder-img card-img">
                 <img class="img-fluid" src="./assets/codeSnap7.png" alt="" />
               </div>
